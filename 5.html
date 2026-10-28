@@ -1,0 +1,567 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Library Management</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f6f9;
+            color: #333;
+        }
+
+        /* Header */
+        header {
+            background: #203b32;
+            color: white;
+            padding: 25px 6%;
+        }
+
+        header h1 {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            color: #d8e7df;
+        }
+
+        /* Navigation */
+        nav {
+            background: #31594a;
+            padding: 14px 6%;
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        nav a:hover {
+            color: #f6d365;
+        }
+
+        /* Main Container */
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 25px auto;
+        }
+
+        .section-title {
+            color: #203b32;
+            margin-bottom: 18px;
+            font-size: 23px;
+        }
+
+        /* Search and Filters */
+        .search-box {
+            background: white;
+            padding: 22px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px #0000000d;
+        }
+
+        .search-form {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr auto;
+            gap: 12px;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        button {
+            background: #31594a;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #203b32;
+        }
+
+        /* Categories */
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 35px;
+        }
+
+        .category {
+            background: white;
+            padding: 22px 12px;
+            text-align: center;
+            border-radius: 8px;
+            border-bottom: 4px solid #477b62;
+        }
+
+        .category .icon {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .category h3 {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .category p {
+            font-size: 13px;
+            color: #777;
+        }
+
+        /* Book Cards */
+        .book-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 22px;
+            margin-bottom: 35px;
+        }
+
+        .book-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px #0000000d;
+            transition: transform 0.2s;
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .book-cover {
+            height: 210px;
+            background: #e4eee8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .book-cover img {
+            height: 175px;
+            width: 125px;
+            object-fit: cover;
+            border-radius: 3px;
+            box-shadow: 3px 4px 8px #00000033;
+        }
+
+        .book-info {
+            padding: 16px;
+        }
+
+        .book-info h3 {
+            font-size: 17px;
+            margin-bottom: 7px;
+            color: #203b32;
+        }
+
+        .book-info p {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .availability {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .available {
+            background: #d9f5e2;
+            color: #18743a;
+        }
+
+        .issued {
+            background: #ffe6d7;
+            color: #a94716;
+        }
+
+        .book-info button {
+            margin-top: 12px;
+        }
+
+        /* Catalog Table */
+        .table-section {
+            background: white;
+            padding: 22px;
+            border-radius: 8px;
+            margin-bottom: 35px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            font-size: 14px;
+        }
+
+        th {
+            background: #31594a;
+            color: white;
+        }
+
+        tr:hover {
+            background: #f1f7f3;
+        }
+
+        /* Library Rules */
+        .rules {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 35px;
+        }
+
+        .rule-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #477b62;
+        }
+
+        .rule-card h3 {
+            color: #203b32;
+            margin-bottom: 10px;
+            font-size: 17px;
+        }
+
+        .rule-card p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        /* Footer */
+        footer {
+            background: #203b32;
+            color: white;
+            text-align: center;
+            padding: 22px;
+            margin-top: 30px;
+        }
+
+        footer p {
+            font-size: 13px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .book-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .search-form {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .categories {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .rules {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 550px) {
+            header h1 {
+                font-size: 24px;
+            }
+
+            .container {
+                width: 94%;
+            }
+
+            .book-grid,
+            .categories,
+            .rules,
+            .search-form {
+                grid-template-columns: 1fr;
+            }
+
+            nav {
+                gap: 15px;
+            }
+
+            .book-cover {
+                height: 230px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header>
+        <h1>📚 Digital Library</h1>
+        <p>Discover, Explore and Read Your Favourite Books</p>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#categories">Categories</a>
+        <a href="#books">Books</a>
+        <a href="#catalog">Book Catalog</a>
+        <a href="#rules">Library Rules</a>
+    </nav>
+
+    <main class="container" id="home">
+
+        <!-- Search and Filter -->
+        <section class="search-box">
+            <h2 class="section-title">Find a Book</h2>
+
+            <form class="search-form" action="#catalog" method="get">
+                <input type="search" name="search"
+                       placeholder="Search by book title or author">
+
+                <select name="category">
+                    <option value="">All Categories</option>
+                    <option>Programming</option>
+                    <option>Science</option>
+                    <option>Literature</option>
+                    <option>Business</option>
+                </select>
+
+                <select name="availability">
+                    <option value="">All Availability</option>
+                    <option>Available</option>
+                    <option>Issued</option>
+                </select>
+
+                <button type="submit">Search</button>
+            </form>
+        </section>
+
+        <!-- Categories -->
+        <section id="categories">
+            <h2 class="section-title">Book Categories</h2>
+
+            <div class="categories">
+                <div class="category">
+                    <div class="icon">💻</div>
+                    <h3>Programming</h3>
+                    <p>120 Books</p>
+                </div>
+
+                <div class="category">
+                    <div class="icon">🔬</div>
+                    <h3>Science</h3>
+                    <p>85 Books</p>
+                </div>
+
+                <div class="category">
+                    <div class="icon">📖</div>
+                    <h3>Literature</h3>
+                    <p>150 Books</p>
+                </div>
+
+                <div class="category">
+                    <div class="icon">📈</div>
+                    <h3>Business</h3>
+                    <p>65 Books</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Books -->
+        <section id="books">
+            <h2 class="section-title">Featured Books</h2>
+
+            <div class="book-grid">
+
+                <article class="book-card">
+                    <div class="book-cover">
+                        <img
+                            src="https://covers.openlibrary.org/b/isbn/9780135957059-L.jpg"
+                            alt="The Pragmatic Programmer book cover">
+                    </div>
+                    <div class="book-info">
+                        <h3>The Pragmatic Programmer</h3>
+                        <p>Author: David Thomas</p>
+                        <p>Category: Programming</p>
+                        <span class="availability available">Available</span>
+                        <button type="button">View Details</button>
+                    </div>
+                </article>
+
+                <article class="book-card">
+                    <div class="book-cover">
+                        <img
+                            src="https://covers.openlibrary.org/b/isbn/9780134685991-L.jpg"
+                            alt="Effective Java book cover">
+                    </div>
+                    <div class="book-info">
+                        <h3>Effective Java</h3>
+                        <p>Author: Joshua Bloch</p>
+                        <p>Category: Programming</p>
+                        <span class="availability issued">Currently Issued</span>
+                        <button type="button">View Details</button>
+                    </div>
+                </article>
+
+                <article class="book-card">
+                    <div class="book-cover">
+                        <img
+                            src="https://covers.openlibrary.org/b/isbn/9780743273565-L.jpg"
+                            alt="The Great Gatsby book cover">
+                    </div>
+                    <div class="book-info">
+                        <h3>The Great Gatsby</h3>
+                        <p>Author: F. Scott Fitzgerald</p>
+                        <p>Category: Literature</p>
+                        <span class="availability available">Available</span>
+                        <button type="button">View Details</button>
+                    </div>
+                </article>
+
+                <article class="book-card">
+                    <div class="book-cover">
+                        <img
+                            src="https://covers.openlibrary.org/b/isbn/9780132350884-L.jpg"
+                            alt="Clean Code book cover">
+                    </div>
+                    <div class="book-info">
+                        <h3>Clean Code</h3>
+                        <p>Author: Robert C. Martin</p>
+                        <p>Category: Programming</p>
+                        <span class="availability available">Available</span>
+                        <button type="button">View Details</button>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- Book Catalog Table -->
+        <section class="table-section" id="catalog">
+            <h2 class="section-title">Book Catalog</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Book ID</th>
+                        <th>Book Title</th>
+                        <th>Author</th>
+                        <th>Category</th>
+                        <th>Availability</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>B101</td>
+                        <td>The Pragmatic Programmer</td>
+                        <td>David Thomas</td>
+                        <td>Programming</td>
+                        <td><span class="availability available">Available</span></td>
+                    </tr>
+
+                    <tr>
+                        <td>B102</td>
+                        <td>Effective Java</td>
+                        <td>Joshua Bloch</td>
+                        <td>Programming</td>
+                        <td><span class="availability issued">Issued</span></td>
+                    </tr>
+
+                    <tr>
+                        <td>B103</td>
+                        <td>The Great Gatsby</td>
+                        <td>F. Scott Fitzgerald</td>
+                        <td>Literature</td>
+                        <td><span class="availability available">Available</span></td>
+                    </tr>
+
+                    <tr>
+                        <td>B104</td>
+                        <td>Clean Code</td>
+                        <td>Robert C. Martin</td>
+                        <td>Programming</td>
+                        <td><span class="availability available">Available</span></td>
+                    </tr>
+
+                    <tr>
+                        <td>B105</td>
+                        <td>Business Strategy</td>
+                        <td>Sample Author</td>
+                        <td>Business</td>
+                        <td><span class="availability issued">Issued</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Library Rules -->
+        <section id="rules">
+            <h2 class="section-title">Library Rules</h2>
+
+            <div class="rules">
+                <div class="rule-card">
+                    <h3>📅 Borrowing Period</h3>
+                    <p>Students may borrow up to three books for
+                       a period of 14 days, subject to library policy.</p>
+                </div>
+
+                <div class="rule-card">
+                    <h3>⏰ Return Books on Time</h3>
+                    <p>Return books on or before the due date.
+                       Late returns may incur a fine.</p>
+                </div>
+
+                <div class="rule-card">
+                    <h3>📕 Protect Library Books</h3>
+                    <p>Keep books clean and avoid writing, tearing
+                       pages or damaging library materials.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2026 Digital Library Management System</p>
+        <p>Read More • Learn More • Grow More</p>
+    </footer>
+
+</body>
+</html>
